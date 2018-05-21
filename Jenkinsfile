@@ -13,6 +13,6 @@ node {
    stage 'Upload Package'
         sh 'echo upload'
 
-   stage 'Deploy to UAT'
-        sh 'echo deploy to UAT'
+   stage 'Deploy to Test'
+        sh 'echo deploy to Test'
 }
