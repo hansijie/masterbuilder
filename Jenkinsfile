@@ -1,6 +1,7 @@
 #!groovy 
 
 node {
+   agent { label "ecs-cloud" }
    stage 'Checkout'
         checkout scm
 
