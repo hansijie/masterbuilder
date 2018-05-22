@@ -1,0 +1,16 @@
+version: 0.0 
+os: linux 
+files:
+  - source: helloworld-0.1.0.jar 
+    destination: /tmp/
+hooks:
+  BeforeInstall: 
+    - location: scripts/installjdk.sh 
+      timeout: 300 
+      runas: root
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 300
+  ValidateService:
+    - location: scripts/validate.sh
+      timeout: 300
