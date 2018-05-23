@@ -1,7 +1,7 @@
 version: 0.0 
 os: linux 
 files:
-  - source: helloworld-0.1.0.jar 
+  - source: helloworld-0.1.0-master.jar 
     destination: /tmp/
 hooks:
   BeforeInstall: 
