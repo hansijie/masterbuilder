@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -cp helloworld.jar hello.HelloWorld > /tmp/running.log
+java -cp /tmp/helloworld.jar hello.HelloWorld > /tmp/running.log
