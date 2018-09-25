@@ -1,0 +1,60 @@
+version: 0.2
+
+env:
+  variables:
+     # key: "value"
+     # key: "value"
+     packageS3: 's3://sijiehanbucket'
+     ecruri: '898111891143.dkr.ecr.cn-north-1.amazonaws.com.cn/helloworld'
+     projectName: 'helloworld'
+     gitRepoName: 'masterbuilderecs'
+  #parameter-store:
+     # key: "value"
+     # key: "value"
+
+phases:
+  install:
+    commands:
+      $(aws ecr get-login --region cn-north-1 --no-include-email)
+    #finally:
+      # - command
+      # - command
+  pre_build:
+    commands:
+      # - command
+      # - command
+      mvn clean package -Pdeploy -Dmaven.test.skip
+      /usr/bin/xml_grep "/project/version" pom.xml --text_only > /tmp/version.txt
+      TZ=Asia/Shanghai date +%Y%m%d-%H%M%S > /tmp/currentdate.txt
+      mv *.jar $projectName-"$(cat /tmp/version.txt)"-"(cat /tmp/currentdate.txt)"
+      sed -i 's/versionbereplaced/"$(cat /tmp/version.txt)"/g' Dockerfile
+      aws s3 cp ./ $packageS3/${gitRepoName}/"(cat /tmp/currentdate.txt)"/ --region cn-north-1 --recursive --exclude 'src/*' --exclude '.git/*' --exclude 'target/*'
+    #finally:
+      # - command
+      # - command
+  build:
+    commands:
+      # - command
+      # - command
+      
+    #finally:
+      # - command
+      # - command
+  #post_build:
+    #commands:
+      # - command
+      # - command
+    #finally:
+      # - command
+      # - command
+#artifacts:
+  #files:
+    # - location
+    # - location
+    # - name
+  #discard-paths: yes
+  #base-directory: location
+#cache:
+  #paths:
+    # - path
+    # - path
