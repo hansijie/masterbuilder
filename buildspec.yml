@@ -17,7 +17,6 @@ phases:
       - $(aws ecr get-login --region cn-north-1 --no-include-email)
     #finally:
       # - command
-      # - command
   pre_build:
     commands:
       # - command
