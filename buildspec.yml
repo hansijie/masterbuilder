@@ -13,7 +13,7 @@ env:
 phases:
   install:
     commands:
-      - yum install -y perl-XML-Twig
+      # - yum install -y perl-XML-Twig
       - mvn clean package -Pdeploy -Dmaven.test.skip
       - $(aws ecr get-login --region cn-north-1 --no-include-email)
     #finally:
