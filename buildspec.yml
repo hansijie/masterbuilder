@@ -13,7 +13,7 @@ env:
 phases:
   install:
     commands:
-      $(aws ecr get-login --region cn-north-1 --no-include-email)
+      - $(aws ecr get-login --region cn-north-1 --no-include-email)
     #finally:
       # - command
       # - command
@@ -21,12 +21,12 @@ phases:
     commands:
       # - command
       # - command
-      mvn clean package -Pdeploy -Dmaven.test.skip
-      /usr/bin/xml_grep "/project/version" pom.xml --text_only > /tmp/version.txt
-      TZ=Asia/Shanghai date +%Y%m%d-%H%M%S > /tmp/currentdate.txt
-      mv *.jar $projectName-"$(cat /tmp/version.txt)"-"(cat /tmp/currentdate.txt)"
-      sed -i 's/versionbereplaced/"$(cat /tmp/version.txt)"/g' Dockerfile
-      aws s3 cp ./ $packageS3/${gitRepoName}/"(cat /tmp/currentdate.txt)"/ --region cn-north-1 --recursive --exclude 'src/*' --exclude '.git/*' --exclude 'target/*'
+      - mvn clean package -Pdeploy -Dmaven.test.skip
+      - /usr/bin/xml_grep "/project/version" pom.xml --text_only > /tmp/version.txt
+      - TZ=Asia/Shanghai date +%Y%m%d-%H%M%S > /tmp/currentdate.txt
+      - mv *.jar $projectName-"$(cat /tmp/version.txt)"-"(cat /tmp/currentdate.txt)"
+      - sed -i 's/versionbereplaced/"$(cat /tmp/version.txt)"/g' Dockerfile
+      - aws s3 cp ./ $packageS3/${gitRepoName}/"(cat /tmp/currentdate.txt)"/ --region cn-north-1 --recursive --exclude 'src/*' --exclude '.git/*' --exclude 'target/*'
     #finally:
       # - command
       # - command
