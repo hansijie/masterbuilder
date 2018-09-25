@@ -2,8 +2,6 @@ version: 0.2
 
 env:
   variables:
-     # key: "value"
-     # key: "value"
      packageS3: 's3://sijiehanbucket'
      ecruri: '898111891143.dkr.ecr.cn-north-1.amazonaws.com.cn/helloworld'
      projectName: 'helloworld'
