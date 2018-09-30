@@ -6,56 +6,32 @@ env:
      ecruri: '898111891143.dkr.ecr.cn-north-1.amazonaws.com.cn/helloworld'
      projectName: 'helloworld'
      gitRepoName: 'masterbuilderecs'
-  #parameter-store:
-     # key: "value"
-     # key: "value"
+     currentdate: 'null'
 
 phases:
   install:
     commands:
       - apt-get update -y
       - apt-get install xml-twig-tools -y
-      - mvn clean package -Pdeploy -Dmaven.test.skip
-      - $(aws ecr get-login --region cn-north-1 --no-include-email)
-    #finally:
-      # - command
   pre_build:
     commands:
-      # - command
-      # - command
+      - mvn clean package -Pdeploy -Dmaven.test.skip
       - /usr/bin/xml_grep "/project/version" pom.xml --text_only > /tmp/version.txt
-      - TZ=Asia/Shanghai date +%Y%m%d-%H%M%S > /tmp/currentdate.txt
-      - ls
-      - pwd
-      - mv *.jar $projectName-"$(cat /tmp/version.txt)"-"(cat /tmp/currentdate.txt)"
-      - sed -i 's/versionbereplaced/"$(cat /tmp/version.txt)"/g' Dockerfile
-      - aws s3 cp ./ $packageS3/${gitRepoName}/"(cat /tmp/currentdate.txt)"/ --region cn-north-1 --recursive --exclude 'src/*' --exclude '.git/*' --exclude 'target/*'
-    #finally:
-      # - command
-      # - command
+      - mv target/*.jar target/$projectName-"$(cat /tmp/version.txt)"-"master.jar"
+      - sed -i 's/versionbereplaced/'"$(cat /tmp/version.txt)"'/g' Dockerfile
+      - aws s3 cp target/$projectName-"$(cat /tmp/version.txt)"-"master.jar" $packageS3/${gitRepoName}/${currentdate}/ --region cn-north-1
+      - aws s3 cp ./ $packageS3/${gitRepoName}/${currentdate}/ --region cn-north-1 --recursive --exclude 'src/*' --exclude '.git/*' --exclude 'target/*'
   build:
     commands:
-      # - command
-      # - command
-      
-    #finally:
-      # - command
-      # - command
-  #post_build:
-    #commands:
-      # - command
-      # - command
-    #finally:
-      # - command
-      # - command
+      - cd /tmp/
+      - aws s3 cp $packageS3/${gitRepoName}/${currentdate}/ ./ --region cn-north-1 --recursive
+      - docker build -t ${projectName} .
+  post_build:
+    commands:
+      - $(aws ecr get-login --region cn-north-1 --no-include-email)
+      - docker tag ${projectName}:latest ${ecruri}:"$(cat /tmp/version.txt)"-${currentdate}
+      - docker push ${ecruri}:"$(cat /tmp/version.txt)"-${currentdate}
+      - echo "$(cat /tmp/version.txt)"-${currentdate}#${packageS3}/${gitRepoName}/${currentdate} > /tmp/latest_image
+      - aws s3 cp /tmp/latest_image ${packageS3}/${gitRepoName}/ --region cn-north-1
 #artifacts:
   #files:
-    # - location
-    # - location
-    # - name
-  #discard-paths: yes
-  #base-directory: location
-#cache:
-  #paths:
-    # - path
-    # - path

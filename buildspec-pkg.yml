@@ -1,0 +1,27 @@
+version: 0.2
+
+env:
+  variables:
+     packageS3: 's3://sijiehanbucket'
+     ecruri: '898111891143.dkr.ecr.cn-north-1.amazonaws.com.cn/helloworld'
+     projectName: 'helloworld'
+     gitRepoName: 'masterbuilderecs'
+     currentdate: 'null'
+
+phases:
+  install:
+    commands:
+      #- command
+  pre_build:
+    commands:
+      #- command test
+  build:
+    commands:
+      - mvn clean package -Pdeploy -Dmaven.test.skip
+  post_build:
+    commands:
+      - cat pom.xml | grep '<version>' | awk -F'>' '{print $2}' | awk -F'<' '{print $1}' > /tmp/version.txt
+      - mv target/*.jar target/$projectName-"$(cat /tmp/version.txt)"-"master.jar"
+      - sed -i 's/versionbereplaced/'"$(cat /tmp/version.txt)"'/g' Dockerfile
+      - aws s3 cp target/$projectName-"$(cat /tmp/version.txt)"-"master.jar" $packageS3/${gitRepoName}/${currentdate}/ --region cn-north-1
+      - aws s3 cp ./ $packageS3/${gitRepoName}/${currentdate}/ --region cn-north-1 --recursive --exclude 'src/*' --exclude '.git/*' --exclude 'target/*'

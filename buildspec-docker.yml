@@ -1,0 +1,31 @@
+version: 0.2
+
+env:
+  variables:
+     packageS3: 's3://sijiehanbucket'
+     ecruri: '898111891143.dkr.ecr.cn-north-1.amazonaws.com.cn/helloworld'
+     projectName: 'helloworld'
+     gitRepoName: 'masterbuilderecs'
+     currentdate: 'null'
+     versionid: '0'
+
+phases:
+  install:
+    commands:
+      #- command
+  pre_build:
+    commands:
+      #- command
+  build:
+    commands:
+      - cd /tmp/
+      - aws s3 cp $packageS3/${gitRepoName}/${currentdate}/ ./ --region cn-north-1 --recursive
+      - aws s3 cp $packageS3/${gitRepoName}/jdk-8u131-linux-x64.rpm ./ --region cn-north-1
+      - docker build -t ${projectName} .
+  post_build:
+    commands:
+      - $(aws ecr get-login --region cn-north-1 --no-include-email)
+      - docker tag ${projectName}:latest ${ecruri}:${versionid}-${currentdate}
+      - docker push ${ecruri}:${versionid}-${currentdate}
+      - echo ${versionid}-${currentdate}#${packageS3}/${gitRepoName}/${currentdate} > /tmp/latest_image
+      - aws s3 cp /tmp/latest_image ${packageS3}/${gitRepoName}/ --region cn-north-1
