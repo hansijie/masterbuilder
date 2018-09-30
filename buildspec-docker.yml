@@ -5,7 +5,7 @@ env:
      packageS3: 's3://sijiehanbucket'
      ecruri: '898111891143.dkr.ecr.cn-north-1.amazonaws.com.cn/helloworld'
      projectName: 'helloworld'
-     gitRepoName: 'masterbuilderecs'
+     gitRepoName: 'masterbuilder'
      currentdate: 'null'
      versionid: '0'
 
