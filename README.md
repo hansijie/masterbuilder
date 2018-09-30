@@ -1,1 +1,1 @@
-this is only for testing with CI/CD
+this is only for testing with CI/CD on ECS
