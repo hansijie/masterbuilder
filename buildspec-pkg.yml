@@ -25,3 +25,7 @@ phases:
       - sed -i 's/versionbereplaced/'"$(cat /tmp/version.txt)"'/g' Dockerfile
       - aws s3 cp target/$projectName-"$(cat /tmp/version.txt)"-"master.jar" $packageS3/${gitRepoName}/${currentdate}/ --region cn-north-1
       - aws s3 cp ./ $packageS3/${gitRepoName}/${currentdate}/ --region cn-north-1 --recursive --exclude 'src/*' --exclude '.git/*' --exclude 'target/*'
+
+cache:
+  paths:
+    - '/root/.m2/**/*'
