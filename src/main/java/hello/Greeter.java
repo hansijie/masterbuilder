@@ -11,7 +11,7 @@ public class Greeter {
         while (true) {
             num = num + 1;
             if (num % 100000000 ==0) {
-               System.out.println("Currently I am at: " + num);
+               System.out.println("Now I am at: " + num);
             }
             if (num == Integer.MAX_VALUE) { 
                 System.out.println("reset");
