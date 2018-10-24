@@ -8,6 +8,7 @@ public class Greeter {
         System.out.println(randLength);
         int num = 0;
         long start = System.currentTimeMillis() / 1000;
+        /*
         while (true) {
             num = num + 1;
             if (num % 100000000 ==0) {
@@ -22,6 +23,7 @@ public class Greeter {
                 break;
             }
         }
+        */
         String localmsg = "The message received is changed to : " + msg;
         return localmsg;
     }
