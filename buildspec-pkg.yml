@@ -23,6 +23,8 @@ phases:
       - cat pom.xml | grep '<version>' | awk -F'>' '{print $2}' | awk -F'<' '{print $1}' > /tmp/version.txt
       - mv target/*.jar target/$projectName-"$(cat /tmp/version.txt)"-"master.jar"
       - sed -i 's/versionbereplaced/'"$(cat /tmp/version.txt)"'/g' Dockerfile
+      - sed -i 's/versionbereplaced/'"$(cat /tmp/version.txt)"'/g' appspec.yml
+      - sed -i 's/versionbereplaced/'"$(cat /tmp/version.txt)"'/g' scripts/start.sh
       - aws s3 cp target/$projectName-"$(cat /tmp/version.txt)"-"master.jar" $packageS3/${gitRepoName}/${currentdate}/ --region cn-north-1
       - aws s3 cp ./ $packageS3/${gitRepoName}/${currentdate}/ --region cn-north-1 --recursive --exclude 'src/*' --exclude '.git/*' --exclude 'target/*'
 
