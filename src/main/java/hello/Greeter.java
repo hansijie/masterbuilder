@@ -5,7 +5,7 @@ public class Greeter {
     public String sayHello(String msg) {
         Random rand = new Random();
         int randLength = rand.nextInt(120) + 240;
-        System.out.println(randLength);
+        //System.out.println(randLength);
         int num = 0;
         long start = System.currentTimeMillis() / 1000;
         /*
