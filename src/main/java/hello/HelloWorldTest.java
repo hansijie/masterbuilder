@@ -11,6 +11,6 @@ public class HelloWorldTest{
 	public void testSayHello(){
                 Greeter greeter = new Greeter();
 		assert (greeter != null);
-		assertEquals("The message received is changed to : Hello World",  greeter.sayHello("Hello World") );
+		assertEquals("The message received is changed to : HelloWorld",  greeter.sayHello("Hello World") );
 	}
 }
