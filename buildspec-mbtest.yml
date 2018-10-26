@@ -22,4 +22,5 @@ phases:
     commands:
       - echo ${versionid}
       - java -cp junit-4.10.jar:helloworld-${versionid}-master.jar hello.TestAll > /tmp/test.result
+      - cat /tmp/test.result
       - /tmp/checktest.sh && echo Build completed on `date`
