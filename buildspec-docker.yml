@@ -29,3 +29,4 @@ phases:
       - docker push ${ecruri}:${versionid}-${currentdate}
       - echo ${versionid}-${currentdate}#${packageS3}/${gitRepoName}/${currentdate} > /tmp/latest_image
       - aws s3 cp /tmp/latest_image ${packageS3}/${gitRepoName}/ --region cn-north-1
+

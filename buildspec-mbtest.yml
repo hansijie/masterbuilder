@@ -1,0 +1,25 @@
+version: 0.2
+
+env:
+  variables:
+     packageS3: 's3://sijiehanbucket'
+     ecruri: '898111891143.dkr.ecr.cn-north-1.amazonaws.com.cn/helloworld'
+     projectName: 'helloworld'
+     gitRepoName: 'masterbuilder'
+     currentdate: 'null'
+     versionid: '0'
+
+phases:
+  install:
+    commands:
+      - echo '#!/bin/bash' > /tmp/checktest.sh; echo 'if [[ `head -n 1 /tmp/test.result` != "true" ]]; then cat /tmp/test.result; exit 1; fi;' >> /tmp/checktest.sh; chmod +x /tmp/checktest.sh
+  pre_build:
+    commands:
+      - cd /tmp/
+      - aws s3 cp $packageS3/${gitRepoName}/${currentdate}/ ./ --region cn-north-1 --recursive
+      - aws s3 cp $packageS3/${gitRepoName}/junit-4.10.jar ./ --region cn-north-1
+  build:
+    commands:
+      - echo ${versionid}
+      - java -cp junit-4.10.jar:helloworld-${versionid}-master.jar hello.TestAll > /tmp/test.result
+      - /tmp/checktest.sh && echo Build completed on `date`
