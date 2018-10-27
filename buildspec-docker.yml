@@ -20,7 +20,8 @@ phases:
     commands:
       - $(aws ecr get-login --region cn-north-1 --no-include-email)
       - echo ${projectName}:latest-${ecruri}:${versionid}-${currentdate}
-      - docker tag ${projectName}:latest ${ecruri}:${versionid}-${currentdate}
+      #- docker tag ${projectName}:latest ${ecruri}:${versionid}-${currentdate}
+      - docker tag helloworld:latest 898111891143.dkr.ecr.cn-north-1.amazonaws.com.cn/helloworld:0.1.1.2-${currentdate}
       - docker push ${ecruri}:${versionid}-${currentdate}
       - echo ${versionid}-${currentdate}#${packageS3}/${gitRepoName}/${currentdate} > /tmp/latest_image
       - aws s3 cp /tmp/latest_image ${packageS3}/${gitRepoName}/ --region cn-north-1
