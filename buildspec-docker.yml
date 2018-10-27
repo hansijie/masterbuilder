@@ -19,8 +19,7 @@ phases:
   post_build:
     commands:
       - $(aws ecr get-login --region cn-north-1 --no-include-email)
-      - echo ${projectName}:latest ${ecruri}:${versionid}-${currentdate}
-      - docker tag ${projectName}:latest-${ecruri}:${versionid}-${currentdate}
+      - docker tag ${projectName}:latest ${ecruri}:${versionid}-${currentdate}
       - docker push ${ecruri}:${versionid}-${currentdate}
       - echo ${versionid}-${currentdate}#${packageS3}/${gitRepoName}/${currentdate} > /tmp/latest_image
       - aws s3 cp /tmp/latest_image ${packageS3}/${gitRepoName}/ --region cn-north-1
